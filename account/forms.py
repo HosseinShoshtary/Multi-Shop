@@ -9,13 +9,11 @@ class UserCreationForm(forms.ModelForm):
     fields, plus a repeated password."""
 
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
-    password2 = forms.CharField(
-        label="Password confirmation", widget=forms.PasswordInput
-    )
+    password2 = forms.CharField(label="Password confirmation", widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ["email",]
+        fields = ["phone",]
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -44,4 +42,4 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ["email", "password", "is_active", "is_admin"]
+        fields = ["phone", "password", "is_active", "is_admin"]
