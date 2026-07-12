@@ -46,8 +46,13 @@ class UserChangeForm(forms.ModelForm):
         fields = ["phone", "password", "is_active", "is_admin"]
 
 
+def start_with_0(value):
+    if value[0] != '0':
+        raise forms.ValidationError("Phone should start with 0")
+
+
 class LoginForm(forms.Form):
-    phone = forms.CharField(widget=forms.TextInput(attrs={"class": 'form-control'}))
+    phone = forms.CharField(widget=forms.TextInput(attrs={"class": 'form-control'}), validators=[start_with_0])
     password = forms.CharField(widget=forms.PasswordInput(attrs={"class": 'form-control'}))
 
     def clean_phone(self):
@@ -60,3 +65,16 @@ class LoginForm(forms.Form):
                 )
 
         return phone
+
+
+    # def clean(self):
+    #     cd = super().clean()
+    #     phone = cd["phone"]
+    #     if len(phone) > 11:
+    #         raise ValidationError(
+    #             "Invalid value: %(value)s is invalid",
+    #             code="invalid",
+    #             params={"value": f"{phone}"},
+    #         )
+    #
+    #     return phone
