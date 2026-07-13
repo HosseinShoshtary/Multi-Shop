@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect, reverse
 from django.views import View
 from .forms import LoginForm
@@ -72,7 +72,7 @@ class OtpLoginView(View):
 #             if Otp.objects.filter(code=["code"], token=token).exists():
 #                 otp = Otp.objects.get(token=token)
 #                 user, is_create = User.objects.get_or_create(phone=otp.phone)
-#                 login(request, user)
+#                 login(request, user, backend="django.contrib.auth.backends.ModelBackend")
 #                 otp.delete()
 #                 return redirect("/")
 #         else:
@@ -81,3 +81,6 @@ class OtpLoginView(View):
 #         return render(request, template_name="account/check_otp.html", context={"form": form})
 
 
+def user_logout(request):
+    logout(request)
+    return redirect("/")

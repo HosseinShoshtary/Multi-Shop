@@ -66,7 +66,6 @@ class LoginForm(forms.Form):
 
         return username
 
-
     # def clean(self):
     #     cd = super().clean()
     #     phone = cd["phone"]
