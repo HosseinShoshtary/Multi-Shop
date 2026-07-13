@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect, reverse
 from django.views import View
-from .forms import LoginForm, RegisterForm, CheckOtpForm
+from .forms import LoginForm
+# from .forms import RegisterForm, CheckOtpForm
 import ghasedak_sms
 from random import randint
-from .models import Otp, User
+# from .models import Otp, User
 from uuid import uuid4
 from django.utils.crypto import get_random_string
 
