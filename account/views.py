@@ -5,6 +5,7 @@ from .forms import LoginForm, RegisterForm, CheckOtpForm
 import ghasedak_sms
 from random import randint
 from .models import Otp, User
+from uuid import uuid4
 from django.utils.crypto import get_random_string
 
 SMS = ghasedak_sms.Ghasedak("A place where you can put the API Key")
@@ -14,7 +15,7 @@ SMS = ghasedak_sms.Ghasedak("A place where you can put the API Key")
 #     return render(request, template_name="account/login.html", context={})
 
 
-class UserLogin(View):
+class OtpLoginView(View):
     def get(self, request):
         form = LoginForm()
         return render(request, template_name="account/login.html", context={"form": form})
@@ -38,7 +39,7 @@ class UserLogin(View):
 # class RegisterView(View):
 #     def get(self, request):
 #         form = RegisterForm()
-#         return render(request, template_name="account/register.html", context={"form": form})
+#         return render(request, template_name="account/otp_login.html", context={"form": form})
 #
 #     def post(self, request):
 #         form = RegisterForm(request.POST)
@@ -47,14 +48,14 @@ class UserLogin(View):
 #             randcode = randint(1000, 9999)
 #             SMS.verification(
 #                 {"receptor": cd["phone"], 'type': '1', 'template': 'randcode', 'param1': randcode})
-#             token = get_random_string(length=100)
+#             token = str(uuid4())
 #             Otp.objects.crate(phone =cd["phone"], code=randcode, token=token)
 #             print(randcode)
 #             return redirect(reverse("account:check_otp") + f'?token={token}')
 #         else:
 #             form.add_error("phone", "invalid data")
 #
-#         return render(request, template_name="account/register.html", context={"form": form})
+#         return render(request, template_name="account/otp_login.html", context={"form": form})
 #
 #
 # class CheckOtpView(View):
@@ -69,8 +70,9 @@ class UserLogin(View):
 #             cd = form.cleaned_data
 #             if Otp.objects.filter(code=["code"], token=token).exists():
 #                 otp = Otp.objects.get(token=token)
-#                 user = User.objects.create_user(phone=otp.phone)
+#                 user, is_create = User.objects.get_or_create(phone=otp.phone)
 #                 login(request, user)
+#                 otp.delete()
 #                 return redirect("/")
 #         else:
 #             form.add_error("phone", "invalid data")
