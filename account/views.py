@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect, reverse
 from django.views import View
-from .forms import LoginForm
+from .forms import LoginForm, AddressCreationForm
 # from .forms import RegisterForm, CheckOtpForm
 import ghasedak_sms
 from random import randint
@@ -79,6 +79,21 @@ class OtpLoginView(View):
 #             form.add_error("phone", "invalid data")
 #
 #         return render(request, template_name="account/check_otp.html", context={"form": form})
+
+
+class AddAddressView(View):
+    def post(self, request):
+        form = AddressCreationForm(request.POST)
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.user = request.user
+            address.save()
+
+        return render(request, template_name="account/add_address.html", context={"form": form})
+
+    def get(self, request):
+        form = AddressCreationForm()
+        return render(request, template_name="account/add_address.html", context={"form": form})
 
 
 def user_logout(request):
