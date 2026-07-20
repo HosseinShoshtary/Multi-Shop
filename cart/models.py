@@ -5,8 +5,13 @@ from product.models import Product
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
+    total_order = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     is_paid = models.BooleanField(default=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.total_price = None
 
     def __str__(self):
         return self.user.phone
@@ -21,3 +26,10 @@ class OrderItem(models.Model):
     price = models.PositiveIntegerField()
 
 
+class DiscountCode(models.Model):
+    name = models.CharField(max_length=10, unique=True)
+    discount = models.SmallIntegerField(default=0)
+    quantity = models.SmallIntegerField(default=1)
+
+    def __str__(self):
+        return self.name
