@@ -7,11 +7,7 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     total_order = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
-    is_paid = models.BooleanField(default=False)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(args, kwargs)
-        self.total_price = None
+    is_paid = models.BooleanField(blank=True, null=True)
 
     def __str__(self):
         return self.user.phone
@@ -24,6 +20,10 @@ class OrderItem(models.Model):
     color = models.CharField(max_length=20)
     quantity = models.SmallIntegerField(default=1)
     price = models.PositiveIntegerField()
+
+    @property
+    def total(self):
+        return self.price * self.quantity
 
 
 class DiscountCode(models.Model):
